@@ -57,7 +57,9 @@ hook.Add("PlayerSay", "Inventory.Commands", function(ply, text)
 end)
 
 hook.Add("PlayerLoadout", "Inventory.SWEP", function(ply)
-  if (IsValid(ply) and !ply:isArrested() and Inventory.Config.SpawnWithInventorySWEP) then
+  local arrested = ply.isArrested and ply:isArrested()
+
+  if (IsValid(ply) and not arrested and Inventory.Config.SpawnWithInventorySWEP) then
     ply:Give("inventory")
   end
 end)
