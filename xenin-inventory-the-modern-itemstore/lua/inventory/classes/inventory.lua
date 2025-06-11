@@ -160,16 +160,8 @@ function INV:Add(ent, dropEnt, model, amount, data, ignoreDatabase)
 end
 
 function INV:CanUseBank()
-  local ply = self:GetPlayer()
-  local npcs = ents.FindByClass("bank_npc")
-
-  for i, v in pairs(npcs) do
-    local dist = ply:GetPos():Distance(v:GetPos())
-
-    if (dist > 200) then continue end
-
-    return true
-  end
+  -- NPC requirement removed, always allow using the bank
+  return true
 end
 
 function INV:SwapBank(inv, bank)
