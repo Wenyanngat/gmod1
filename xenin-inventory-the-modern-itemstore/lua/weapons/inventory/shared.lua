@@ -32,9 +32,22 @@ end
 function SWEP:PrimaryAttack()
   if (CLIENT) then return end
 
-  if (SERVER) then
-    self.Owner:Inventory():Pickup(self.Owner:GetEyeTrace().Entity)
-  end
+  local owner = self.Owner
+  if (not IsValid(owner)) then return end
+
+  local tr = util.TraceLine({
+    start = owner:EyePos(),
+    endpos = owner:EyePos() + owner:EyeAngles():Forward() * 250,
+    filter = owner
+  })
+
+  local ent = tr.Entity
+  if (not IsValid(ent) or ent.ignoreInv) then return end
+
+  local item = Inventory.Config.Items[ent:GetClass()] or (Inventory.Config.WhitelistEntities[ent:GetClass()] and Inventory.Config.Items["base_entity"])
+  if (not item) then return end
+
+  item:OnPickup(owner, ent)
 end
 
 function SWEP:SecondaryAttack()

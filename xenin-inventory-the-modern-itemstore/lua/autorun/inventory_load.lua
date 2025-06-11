@@ -2,6 +2,22 @@
 
 Inventory = Inventory or {}
 
+-- Provide basic XeninUI stubs so the addon can run without the framework
+if (not XeninUI) then
+  XeninUI = {}
+  XeninUI.Theme = {
+    Navbar = Color(40, 40, 40),
+    Primary = Color(52, 152, 219),
+    Background = Color(20, 20, 20),
+    Red = Color(231, 76, 60),
+    Green = Color(46, 204, 113)
+  }
+  XeninUI.Frame = { Width = 600, Height = 400 }
+
+  local noop = function() end
+  setmetatable(XeninUI, { __index = function() return noop end })
+end
+
 function Inventory:IncludeClient(path)
 	if (CLIENT) then
 		include("inventory/" .. path .. ".lua")
@@ -82,11 +98,7 @@ local function Load()
 	Inventory.FinishedLoading = true
 end
 
-if (XeninUI) then
-	Load()
-else
-	hook.Add("XeninUI.Loaded", "Inventory", Load)
-end
+Load()
 
 if (SERVER) then
 	resource.AddFile("resource/fonts/Montserrat-Bold.ttf")
